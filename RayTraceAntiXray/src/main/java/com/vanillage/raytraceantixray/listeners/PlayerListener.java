@@ -1,5 +1,6 @@
 package com.vanillage.raytraceantixray.listeners;
 
+import com.vanillage.raytraceantixray.net.OutboundHandler;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

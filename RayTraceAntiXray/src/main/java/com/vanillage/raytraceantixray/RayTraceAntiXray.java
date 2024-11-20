@@ -18,7 +18,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
-import com.comphenix.protocol.ProtocolLibrary;
 import com.destroystokyo.paper.antixray.ChunkPacketBlockController;
 import com.google.common.base.Throwables;
 import com.google.common.collect.MapMaker;
@@ -45,25 +44,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
-
-import java.io.File;
-import java.util.Map;
-import java.util.Timer;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 public final class RayTraceAntiXray extends JavaPlugin {
     // private volatile Configuration configuration;
@@ -149,7 +132,7 @@ public final class RayTraceAntiXray extends JavaPlugin {
                             try {
                                 for (Player p : Bukkit.getOnlinePlayers())
                                     OutboundHandler.detach(p, OutboundHandler.NAME);
-                            } catch (Throwablt t) {
+                            } catch (Throwable t) {
                                 if (throwable == null) {
                                     throwable = t;
                                 } else {
@@ -334,4 +317,7 @@ public final class RayTraceAntiXray extends JavaPlugin {
         return ((CraftWorld) world).getHandle().chunkPacketBlockController instanceof ChunkPacketBlockControllerAntiXray;
     }
 
+    public boolean isFolia() {
+        return folia;
+    }
 }

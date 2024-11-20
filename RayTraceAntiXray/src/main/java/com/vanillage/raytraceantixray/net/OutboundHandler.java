@@ -1,14 +1,12 @@
 package com.vanillage.raytraceantixray.net;
 
+import com.vanillage.raytraceantixray.data.LongWrapper;
+import net.minecraft.network.protocol.game.ClientboundForgetLevelChunkPacket;
+import net.minecraft.network.protocol.game.ClientboundRespawnPacket;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
 import org.bukkit.entity.Player;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.ChunkCoordIntPair;
 import com.vanillage.raytraceantixray.RayTraceAntiXray;
 import com.vanillage.raytraceantixray.data.ChunkBlocks;
 import com.vanillage.raytraceantixray.data.PlayerData;
@@ -19,10 +17,10 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.world.level.chunk.LevelChunk;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
 
 public class OutboundHandler extends AbstractOutboundHandler {
 
@@ -45,7 +43,8 @@ public class OutboundHandler extends AbstractOutboundHandler {
     }
 
     public boolean handle(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
-        if (msg instanceof ClientboundLevelChunkWithLightPacket packet) {
+        switch (msg) {
+            case ClientboundLevelChunkWithLightPacket packet -> {
             // A player data instance is always bound to a world and defines what is to be calculated.
             // Apart from the join and quit event, this is the only place that defines the world of a player by renewing the player data instance.
             // In principle, we could (additionally) renew the player data instance anywhere else if we detect a world change (e.g. move event, changed world event, ...).
@@ -105,7 +104,7 @@ public class OutboundHandler extends AbstractOutboundHandler {
             if (!world.equals(playerData.getLocations()[0].getWorld())) {
                 // Detected a world change.
                 // We need the player's current location to construct a new player data instance.
-                Location location = event.getPlayer().getEyeLocation();
+                Location location = player.getEyeLocation();
 
                 if (!world.equals(location.getWorld())) {
                     // The player has changed the world again since this chunk packet was sent.
@@ -132,6 +131,11 @@ public class OutboundHandler extends AbstractOutboundHandler {
             chunkBlocks = new ChunkBlocks(chunk, new HashMap<>(chunkBlocks.getBlocks()));
             playerData.getChunks().put(chunkBlocks.getKey(), chunkBlocks);
         }
+        case ClientboundForgetLevelChunkPacket forget -> plugin.getPlayerData().get(player.getUniqueId()).getChunks().remove(new LongWrapper(forget.pos().toLong()));
+        case ClientboundRespawnPacket ignored -> plugin.getPlayerData().get(player.getUniqueId()).getChunks().clear();
+        default -> {}
+        }
+
         return true;
     }
 

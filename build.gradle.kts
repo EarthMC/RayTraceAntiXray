@@ -6,7 +6,7 @@ plugins {
 group = "com.vanillage.raytraceantixray"
 version = "1.13.0"
 description = "RayTraceAntiXray"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenCentral()
@@ -29,7 +29,7 @@ dependencies {
 
 java {
     // Configure the java toolchain. This allows gradle to auto-provision JDK 17 on systems that only have JDK 8 installed for example.
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 
     // Upstream branch was a multi-module maven project
     sourceSets.getByName("main") {
@@ -47,7 +47,7 @@ tasks {
     compileJava {
         // Set the release flag. This configures what version bytecode the compiler will emit, as well as what JDK APIs are usable.
         // See https://openjdk.java.net/jeps/247 for more information.
-        options.release.set(17)
+        options.release.set(21)
     }
 }
 

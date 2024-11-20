@@ -25,14 +25,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.MissingPaletteEntryException;
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.util.Vector;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.Callable;
 
 public final class RayTraceCallable implements Callable<Void> {
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();
@@ -65,7 +57,6 @@ public final class RayTraceCallable implements Callable<Void> {
         this.playerData = playerData;
         MutableLongWrapper mutableLongWrapper = new MutableLongWrapper(0L);
         ConcurrentMap<LongWrapper, ChunkBlocks> chunks = playerData.getChunks();
-        ChunkPacketBlockControllerAntiXray chunkPacketBlockControllerAntiXray = (ChunkPacketBlockControllerAntiXray) chunkPacketBlockController;
         boolean[] solidGlobal = chunkPacketBlockControllerAntiXray.solidGlobal;
         cachedSectionBlockOcclusionGetter = new CachedSectionBlockOcclusionGetter() {
             private static final boolean UNLOADED_OCCLUDING = true;
